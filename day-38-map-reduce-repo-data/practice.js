@@ -1,5 +1,3 @@
-'use strict';
-
 var repositories = {
   "total_count": 8224,
   "incomplete_results": false,
@@ -3567,26 +3565,17 @@ var repositories = {
   ]
 }
 
-
-
-
-
 //Find all the repo with greater than the specified number of forks
 function repositoriesWithOverNForks(array, n) {
-  var nForks = array.filter(filterForks);
-
-  function filterForks(item) {
+  var specifiedForks = array.filter(function(item) {
     return item.forks_count > n;
-  }
+  });
 
-  return nForks;
+  return specifiedForks;
 }
 
-var overNForksResult = repositoriesWithOverNForks(repositories.items, 100);
+var overNForksResult =  repositoriesWithOverNForks(repositories.items, 100);
 // console.log(overNForksResult);
-
-
-
 
 /*
 Take the name, login, and html_url for each and map them to a new object.
@@ -3598,90 +3587,28 @@ Take the name, login, and html_url for each and map them to a new object.
 ...
 ]
 */
-function mapNameLoginAndHtmlUrl(array) {
-  var nameLoginAndHtml = array.map(mappedInfo)
 
-  function mappedInfo(item) {
+function mapNameLoginAndHtmlUrl(array) {
+  var nameLoginAndHtml = array.map(function(item) {
     return {
       html_url: item.html_url,
       login: item.owner.login,
       name: item.name
-    };
-  }
-
+    }
+  });
   return nameLoginAndHtml;
 }
 
 var mappedNameLoginAndHtmlUrlResult = mapNameLoginAndHtmlUrl(repositories.items);
 // console.log(mappedNameLoginAndHtmlUrlResult);
 
-
-
-
-
 //Combine the previous two functions
+
 function repositoriesWithOverNForksWithOnlyNameLoginAndHtmlUrl(array, n) {
   return mapNameLoginAndHtmlUrl(overNForksResult);
+
 }
+
 
 var mappedAndMinForkedResult = repositoriesWithOverNForksWithOnlyNameLoginAndHtmlUrl(repositories.items, 100);
 // console.log(mappedAndMinForkedResult);
-
-
-
-
-
-/*
-Take the full_name, watchers_count, forks_count, and open_issues_count for each and map them to a new object.
-[{
-  forks_count: 90,
-  full_name: "ksm/SwiftInFlux",
-  open_issues: 0,
-  watchers_count: 1935
-},
-...
-]
-*/
-function mapFullNameWatchersForksAndOpenIssues(array) {
-  var nameWatchersForksAndIssues = array.map(mappedInfo);
-
-  function mappedInfo(item) {
-    return {
-      forks_count: item.forks_count,
-      full_name: item.full_name,
-      open_issues: item.open_issues,
-      watchers_count: item.watchers_count
-    };
-  }
-  return nameWatchersForksAndIssues;
-}
-
-var mapFullNameWatchersForksAndOpenIssuesResult = mapFullNameWatchersForksAndOpenIssues(repositories.items);
-// console.log(mapFullNameWatchersForksAndOpenIssuesResult);
-
-
-
-
-function sumOfAllTheWatchers(array) {
-  var sumOfWatchers = array.reduce(reducedSum, 0);
-
-  function reducedSum(previousTotal, currentTotal) {
-    return previousTotal + currentTotal.watchers_count;
-  }
-  return sumOfWatchers;
-}
-
-var watchersSum = sumOfAllTheWatchers(repositories.items);
-// console.log('watchers', watchersSum);
-
-
-
-
-
-function averageWatchers(array) {
-
-  return watchersSum / array.length;
-}
-
-var averageWatchers = averageWatchers(repositories.items);
-console.log('avg', averageWatchers);

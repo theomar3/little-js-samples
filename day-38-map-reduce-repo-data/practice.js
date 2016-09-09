@@ -3612,3 +3612,47 @@ function repositoriesWithOverNForksWithOnlyNameLoginAndHtmlUrl(array, n) {
 
 var mappedAndMinForkedResult = repositoriesWithOverNForksWithOnlyNameLoginAndHtmlUrl(repositories.items, 100);
 // console.log(mappedAndMinForkedResult);
+
+/*
+Take the full_name, watchers_count, forks_count, and open_issues_count for each and map them to a new object.
+[{
+  forks_count: 90,
+  full_name: "ksm/SwiftInFlux",
+  open_issues: 0,
+  watchers_count: 1935
+},
+...
+]
+*/
+
+function mapFullNameWatchersForksAndOpenIssues(array) {
+  var nameWatchersForksAndIssues = array.map(function(item) {
+    return {
+      forks_count : item.forks_count,
+      full_name: item.full_name,
+      open_issues: item.open_issues,
+      watchers_count: item.watchers_count
+    };
+  });
+  return nameWatchersForksAndIssues;
+}
+
+
+var mapFullNameWatchersForksAndOpenIssuesResult = mapFullNameWatchersForksAndOpenIssues(repositories.items);
+// console.log(mapFullNameWatchersForksAndOpenIssuesResult);
+
+function sumOfAllTheWatchers(array) {
+  var watchersSum = array.reduce(reducedSum, 0);
+
+  function reducedSum(previousTotal, currentTotal) {
+    return previousTotal += currentTotal.watchers_count;
+  }
+
+  return watchersSum;
+}
+var watchersSum = sumOfAllTheWatchers(repositories.items);
+// console.log('watchers', watchersSum);
+
+function averageWatchers(array) {
+  return watchersSum / array.length;
+}
